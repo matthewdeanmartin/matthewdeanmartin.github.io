@@ -7,6 +7,38 @@
   <!-- Primary fallback: meta refresh -->
   <meta http-equiv="refresh" content="5;url=https://matthewdeanmartin.github.io/matthewdeanmartin/" />
 
+  <!--
+    IndieAuth / webmention identity for the DOMAIN matthewdeanmartin.github.io.
+
+    This page is the identity anchor for the whole domain, which is why the
+    redirect below is now opt-in rather than automatic. Services that verify
+    identity (IndieAuth, webmention.io) fetch this URL and look for rel="me"
+    and rel="webmention" in the markup. A page that immediately redirects them
+    elsewhere never gets read — which is what was happening before.
+
+    The <link> tags must therefore be here, and this page must actually render.
+  -->
+
+  <!-- rel="me" must be RECIPROCAL to authenticate: the linked profile has to
+       link back to this exact URL. One direction alone proves nothing.
+
+       GitHub: reciprocal (its Website field is https://…github.io/mistersql/ —
+       see the note below), so this is the pair IndieAuth can use.
+
+       Mastodon: NOT reciprocal as of 2026-08-07. That profile's verified links
+       are youtube / blog.wakayos.com / github / pypi — none point here. The tag
+       is kept because it is true and harmless, but it will not authenticate
+       until "https://matthewdeanmartin.github.io/" is added to that profile's
+       metadata fields. -->
+  <link rel="me" href="https://github.com/matthewdeanmartin" />
+  <link rel="me" href="https://mastodon.social/@mistersql" />
+
+  <!-- Webmention endpoint for this domain. webmention.io keys on the domain,
+       so the root page is where it belongs; project sites under this domain
+       (e.g. /mistersql/) advertise their own in their own <head>. -->
+  <link rel="webmention" href="https://webmention.io/matthewdeanmartin.github.io/webmention" />
+  <link rel="pingback" href="https://webmention.io/matthewdeanmartin.github.io/xmlrpc" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
 
@@ -68,8 +100,19 @@
   </script>
 </head>
 <body>
-  <main>
-    <h1>Redirecting…</h1>
+  <!--
+    Note for future confusion: the redirect above is CLIENT-side (JS +
+    meta refresh). Identity verifiers (IndieAuth, webmention.io) fetch this URL
+    over HTTP, get 200, and parse this markup — they do not run JavaScript and
+    generally do not honour meta refresh. So the redirect and the rel="me"
+    markup coexist happily: humans get bounced, machines get read.
+
+    What would break verification is an HTTP 30x at this URL, since the
+    identity would then arguably be the destination rather than this domain.
+    Keep the redirect client-side.
+  -->
+  <main class="h-card">
+    <h1><a class="u-url p-name" rel="me" href="https://matthewdeanmartin.github.io/">Matthew Dean Martin</a></h1>
     <p>
       You are being sent to the destination page.
       If nothing happens automatically, use the link below.
@@ -79,8 +122,14 @@
         Continue to destination →
       </a>
     </p>
+    <p>
+      <a href="https://matthewdeanmartin.github.io/mistersql/">Mistersql blog →</a>
+    </p>
     <p class="small">
       JavaScript disabled or blocked? The page will refresh in ~5 seconds.
+      <br />
+      <a rel="me" href="https://github.com/matthewdeanmartin">GitHub</a> ·
+      <a rel="me" href="https://mastodon.social/@mistersql">Mastodon</a>
     </p>
   </main>
 </body>
